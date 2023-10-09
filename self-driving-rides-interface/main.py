@@ -115,13 +115,16 @@ window.bind('<Down>', lambda event: pan_down())
 def draw_red_paths(index=0):
     if index < len(red_path_lines):
         parts = red_path_lines[index].strip().split()
+
         if len(parts) >= 2:
             num_trips = int(parts[0])
             for i in range(1, num_trips + 1):
                 trip_num = int(parts[i])
                 if trip_num < len(lines):
-                    x0, y0, x1, y1, _, _ = map(int, lines[num_trips + 1].split())
+                    x0, y0, x1, y1, _, _ = map(int, lines[trip_num + 1].split())
+                    print('x0:', x0, ', y0:', y0, ', x1:', x1, ', y1:,', y1)
                     draw_path(x0, y0, x1, y1, 'red')
+
         print(index)
         window.after(1, draw_red_paths, index + 1)
 
@@ -166,7 +169,7 @@ def print_rides_not_assigned():
             for num in range(abs(last_ride_number - ride_number) - 1):
                 print('Ride number:', last_ride_number + num + 1)
                 x0, y0, x1, y1, earliest_start, latest_finish = map(int, lines[last_ride_number + num + 1].split())
-                print('x0:', x0, ', y0:', y0, ', x1:', x1, ', y1,', y1, ', earliest_start:', earliest_start,
+                print('x0:', x0, ', y0:', y0, ', x1:', x1, ', y1:,', y1, ', earliest_start:', earliest_start,
                       ', latest_finish:', latest_finish)
 
         last_ride_number = ride_number
@@ -177,6 +180,9 @@ print_rides_not_assigned()
 
 # Appel de la fonction pour dessiner les trajets
 window.after(1000, trips)
+
+# Appel de la fonction pour dessiner les trajets effectués (ajoutez ceci si vous souhaitez afficher uniquement les trajets effectués, sans les trajets possibles)
+# window.after(1000, draw_red_paths)
 
 # Création d'une légende pour les couleurs des trajets
 legend_frame = tk.Frame(window)
